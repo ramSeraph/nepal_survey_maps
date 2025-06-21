@@ -1,0 +1,183 @@
+{
+  "2782_07A.jpg": {
+    "corner_overrides": [null, [438, 7032], null, null]
+  },
+  "2786_09B.jpg": {
+    "intersection_method": "jica",
+    "corner_overrides": [null, [372, 7009], null, null]
+  },
+  "2786_05A.jpg": {
+    "max_corner_angle_diff": 4
+  },
+  "2684_04B.jpg": {
+    "intersection_method": "jica"
+  },
+  "2685_02C_06A.jpg": {
+    "band_color": "greyish",
+    "corner_erode": -3,
+    "max_corner_angle_diff": 6,
+    "corner_overrides": [null, [432, 7142], null, null]
+  },
+  "2784_02A.jpg": {
+    "max_corner_angle_diff": 4
+  },
+  "2882_14D.jpg": {
+    "corner_overrides": [null, null, [6185, 7068], null]
+  },
+  "2880_08B.jpg": {
+    "max_corner_angle_diff": 4
+  },
+  "2983_11.jpg": {
+    "corner_overrides": [[320, 507], null, null, null]
+  },
+  "2785_02D.jpg": {
+    "max_corner_angle_diff": 4
+  },
+  "2687_03D.jpg": {
+    "corner_overrides": [null, null, [6176,7041], [6153,480]]
+  },
+  "2782_02C_06A.jpg": {
+    "intersection_method": "jica",
+    "corner_overrides": [ null, null, [6154, 7010], null]
+  },
+  "2981_02.jpg": {
+    "intersection_method": "jica",
+    "corner_overrides": [ null, [334,7072], null, null]
+  },
+  "2786_09A.jpg": {
+    "min_corner_contour_ratio": 0.02
+  },
+  "2786_05B.jpg": {
+    "intersection_method": "jica",
+    "corner_overrides": [null, null, null, [6183, 451]]
+  },
+  "2786_05C.jpg": {
+    "intersection_method": "jica"
+  },
+  "2980_14A.jpg": {
+    "corner_erode": -3
+  },
+  "2786_13C.jpg": {
+    "max_corner_angle_diff": 4
+  },
+  "2883_12.jpg": {
+    "auto_rotate_thresh": 1.0,
+    "max_corner_angle_diff": 5
+  },
+  "2687_03A.jpg": {
+    "max_corner_angle_diff": 4
+  },
+  "2786_09D.jpg": {
+    "max_corner_angle_diff": 4
+  },
+  "2883_15A.jpg": {
+    "corner_overrides": [null, null, [6174, 7002], null]
+  },
+  "2787_13A.jpg": {
+    "corner_overrides": [null, null, null, [6105,467]]
+  },
+  "2685_04C.jpg": {
+    "intersection_method": "jica",
+    "max_corner_angle_diff": 4,
+    "corner_overrides": [[399,528], null, null, null]
+  },
+  "2687_03C.jpg": {
+    "auto_rotate_thresh": 1.0
+  },
+  "2785_05B.jpg": {
+    "corner_overrides": [ null, [435, 6993], null, null]
+  },
+  "2882_13C.jpg": {
+    "find_line_iter": 4,
+    "corner_overrides": [ null, null, [6213, 7017], null]
+  },
+  "2785_09B.jpg": {
+    "corner_overrides": [null, [419, 6983], null, null]
+  },
+  "2882_12D.jpg": {
+    "max_corner_angle_diff": 5
+  },
+  "2687_09A.jpg": {
+    "max_corner_angle_diff": 9
+  },
+  "2883_13A.jpg": {
+    "max_corner_angle_diff": 5
+  },
+  "2782_01D.jpg": {
+    "max_corner_angle_diff": 6
+  },
+  "2883_09B.jpg": {
+    "corner_overrides": [null, null, [6216, 6966], null]
+  },
+  "2784_12D.jpg": {
+    "corner_overrides": [null, null, null, [6160,485]]
+  },
+  "2686_08C.jpg": {
+    "max_corner_angle_diff": 4
+  },
+  "2880_03C.jpg": {
+    "auto_rotate_thresh": 1.0
+  },
+  "2980_03.jpg": {
+    "corner_overrides": [null, null, null, [6021, 530]]
+  },
+  "2881_01C.jpg": {
+    "collar_erode": -4
+  },
+  "2785_06D.jpg": {
+    "corner_overrides": [null, [453, 7034], null, null]
+  },
+  "2982_04.jpg": {
+    "corner_overrides": [[430, 686], null, null, [6055,683]]
+  },
+  "2884_14D.jpg": {
+    "corner_overrides": [null, [449, 7007], null, null]
+  },
+  "2782_02A.jpg": {
+    "auto_rotate_thresh": 1.0
+  },
+  "2882_06A.jpg": {
+    "band_color": "greyish"
+  },
+  "2781_04A.jpg": {
+    "corner_overrides": [null, null, [6040,6976], null]
+  },
+  "2980_07C.jpg": {
+    "corner_overrides": [[434, 478], null, null, null]
+  },
+  "2687_07B.jpg": {
+    "corner_overrides": [null, [356, 7003], null, null]
+  },
+  "2784_07C.jpg": {
+    "corner_overrides": [[436,507], null, null, null]
+  },
+  "2980_07A.jpg": {
+    "band_color": "greyish"
+  },
+  "2882_06C.jpg": {
+    "max_corner_angle_diff": 4,
+    "corner_overrides": [[444, 461], null, null, null]
+  },
+  "2882_10C.jpg": {
+    "corner_overrides": [[468, 485], null, null, null]
+  },
+  "2884_13D.jpg": {
+    "corner_overrides": [[369, 461], null, null, null]
+  },
+  "2883_16B.jpg": {
+    "find_line_scale": 10,
+    "min_corner_contour_ratio": 0.03
+  },
+  "2784_16C.jpg": {
+    "find_line_scale": 10
+  },
+  "2881_07B.jpg": {
+    "band_color": "greyish"
+  },
+  "2782_01A_01C.jpg": {
+    "corner_overrides": [null, [432, 7035], [6170, 7040], null]
+  },
+  "2687_12B_D.jpg": {
+    "corner_overrides": [null, null, [6219, 7025], null]
+  }
+}

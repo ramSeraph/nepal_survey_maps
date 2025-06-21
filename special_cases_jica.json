@@ -1,0 +1,32 @@
+{
+  "091-16.jpg": {
+    "corner_overrides": [null, [316, 6269], null, [6228, 445]]
+  },
+  "103-03.jpg": {
+    "min_expected_points": 1
+  },
+  "098-08.jpg": {
+    "corner_max_dist_ratio": 0.62
+  },
+  "098-11.jpg": {
+    "corner_max_dist_ratio": 0.65
+  },
+  "098-03.jpg": {
+    "corner_max_dist_ratio": 0.618 
+  },
+  "097-08.jpg": {
+    "corner_max_dist_ratio": 0.7
+  },
+  "099-08.jpg": {
+    "corner_max_dist_ratio": 0.7
+  },
+  "104-01.jpg": {
+    "corner_overrides": [null, null, [6145, 6341], null]
+  },
+  "100-09.jpg": {
+    "corner_max_dist_ratio": 0.7
+  },
+  "099-05.jpg": {
+    "corner_max_dist_ratio": 0.63
+  }
+}
