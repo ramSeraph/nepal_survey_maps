@@ -38,11 +38,11 @@ uvx --with numpy --with pillow --with gdal==$GDAL_VERSION --from topo_map_proces
 
 # 8. create the partitioned pmtiles
 uvx --from topo_map_processor partition --only-disk --from-tiles-dir export/tiles/jica --to-pmtiles-prefix export/pmtiles/Nepal_jica --max-zoom 15 --attribution-file attribution.txt --name "Nepal_jica" --description "Nepal 1:25000 Topo maps from Survey Department in collabartion with JICA"
-uvx --from topo_map_processor partitio --only-disk --from-tiles-dir export/tiles/main --to-pmtiles-prefix export/pmtiles/Nepal_main --max-zoom 15 --attribution-file attribution.txt --name "Nepal_main" --description "Nepal 1:25000 and 1:50000 Topo maps from Survey Department"
+uvx --from topo_map_processor partition --only-disk --from-tiles-dir export/tiles/main --to-pmtiles-prefix export/pmtiles/Nepal_main --max-zoom 15 --attribution-file attribution.txt --name "Nepal_main" --description "Nepal 1:25000 and 1:50000 Topo maps from Survey Department"
 
 # 9. create the bounds geojson files
-uvx --from topo_map_processor collect_bounds export/bounds/jica export/bounds_jica.geojson
-uvx --from topo_map_processor collect_bounds export/bounds/main export/bounds_main.geojson
+uvx --from topo_map_processor collect-bounds export/bounds/jica export/bounds_jica.geojson
+uvx --from topo_map_processor collect-bounds export/bounds/main export/bounds_main.geojson
 
 # 10. create the displayable index files
 ogr2ogr -f GeoJSON -t_srs EPSG:4326 data/index_jica_wgs84.geojson data/index_jica.geojsonl
