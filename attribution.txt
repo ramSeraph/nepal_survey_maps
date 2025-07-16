@@ -1,0 +1,2 @@
+1:50000/1:25000 Topographic Maps from <a href="https://nationalgeoportal.gov.np/" target="_blank">Nepal Survey Department</a>, sourced through <a href="https://www.maze.com.np/Maps/Topo-Nepal" target="_blank">THE MAZE</a>
+

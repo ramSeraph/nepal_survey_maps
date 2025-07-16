@@ -9,13 +9,13 @@ import requests
 import json
 
 from pathlib import Path
-from pprint import pprint
 
 data_dir = Path('data')
+list_dir = Path('lists')
 
 def get_jica_url_map():
     url_map = {}
-    main_list_file = data_dir / 'list_jica.geojsonl'
+    main_list_file = list_dir / 'list_jica.geojsonl'
     with open(main_list_file, 'r') as f:
         for line in f:
             item = json.loads(line)
@@ -35,7 +35,7 @@ def get_jica_url_map():
 
 def get_main_url_map():
     url_map = {}
-    main_list_file = data_dir / 'list.geojsonl'
+    main_list_file = list_dir / 'list_main.geojsonl'
     with open(main_list_file, 'r') as f:
         for line in f:
             item = json.loads(line)
@@ -67,8 +67,8 @@ def download_sheets(url_map, typ):
         file.write_bytes(resp.content)
 
 def main():
-    #url_map = get_main_url_map()
-    #download_sheets(url_map, 'main')
+    url_map = get_main_url_map()
+    download_sheets(url_map, 'main')
     jica_url_map = get_jica_url_map()
     download_sheets(jica_url_map, 'jica')
 
