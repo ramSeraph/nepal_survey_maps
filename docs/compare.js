@@ -32,7 +32,7 @@ function getMap(target, layers) {
         view: new ol.View({
             zoom: 7,
             maxZoom: 15,
-            center: [0, 0]
+            center: NEPAL_CENTER
         }),
     });
 }
