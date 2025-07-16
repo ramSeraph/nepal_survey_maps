@@ -104,7 +104,7 @@ div#compare div {
     margin-right: inherit;
 }
 .ol-attribution li:not(:last-child):after {
-    content: "|";
+    content: " | ";
     /*color: var(--text-color);*/
 }
 /*

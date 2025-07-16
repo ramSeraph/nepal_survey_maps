@@ -22,13 +22,15 @@ const gridStyle = new ol.style.Style({
     }),
 });
 
+const NEPAL_CENTER = [85.00, 28.00];
+
 function getMap(target, layers) {
     return new ol.Map({
         controls: [],
         interactions: getInteractions(),
         target: target,
         view: new ol.View({
-            zoom: 0,
+            zoom: 7,
             maxZoom: 15,
             center: [0, 0]
         }),
