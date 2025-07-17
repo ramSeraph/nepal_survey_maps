@@ -12,6 +12,8 @@ mkdir -p lists/
 ogr2ogr -f "GeoJSONSeq" lists/list_jica.geojsonl data/jica.kmz 
 ogr2ogr -f "GeoJSONSeq" lists/list_main.geojsonl data/main.kmz 
 
+# 2.b manually remove the wrong entries in the list.. there are around 10 of them
+
 # 3. download missing files from pahar
 wget -O data/raw/jica/099-12.jpg https://pahar.in/pahar/Maps--Primary/Nepal%20Maps/Nepal%20Topo%20Maps/099-12%20Jhirubas.jpg
 
@@ -37,16 +39,16 @@ uvx --with numpy --with pillow --with gdal==$GDAL_VERSION --from topo_map_proces
 uvx --with numpy --with pillow --with gdal==$GDAL_VERSION --from topo_map_processor tile --tiffs-dir export/gtiffs/main --tiles-dir export/tiles/main --max-zoom 15
 
 # 8. create the partitioned pmtiles
-uvx --from topo_map_processor partition --only-disk --from-tiles-dir export/tiles/jica --to-pmtiles-prefix export/pmtiles/Nepal_jica --max-zoom 15 --attribution-file attribution.txt --name "Nepal_jica" --description "Nepal 1:25000 Topo maps from Survey Department in collabartion with JICA"
-uvx --from topo_map_processor partition --only-disk --from-tiles-dir export/tiles/main --to-pmtiles-prefix export/pmtiles/Nepal_main --max-zoom 15 --attribution-file attribution.txt --name "Nepal_main" --description "Nepal 1:25000 and 1:50000 Topo maps from Survey Department"
+uvx --from topo_map_processor partition --only-disk --from-tiles-dir export/tiles/jica --to-pmtiles-prefix export/pmtiles/Nepal_jica --attribution-file attribution.txt --name "Nepal_jica" --description "Nepal 1:25000 Topo maps from Survey Department in collabartion with JICA"
+uvx --from topo_map_processor partition --only-disk --from-tiles-dir export/tiles/main --to-pmtiles-prefix export/pmtiles/Nepal_main --attribution-file attribution.txt --name "Nepal_main" --description "Nepal 1:25000 and 1:50000 Topo maps from Survey Department"
 
 # 9. create the bounds geojson files
-uvx --from topo_map_processor collect-bounds export/bounds/jica export/bounds_jica.geojson
-uvx --from topo_map_processor collect-bounds export/bounds/main export/bounds_main.geojson
+uvx --from topo_map_processor collect-bounds --bounds-dir export/bounds/jica --output-file export/bounds_jica.geojson
+uvx --from topo_map_processor collect-bounds --bounds-dir export/bounds/main --output-file export/bounds_main.geojson
 
 # 10. create the displayable index files
-ogr2ogr -f GeoJSON -t_srs EPSG:4326 data/index_jica_wgs84.geojson data/index_jica.geojsonl
-ogr2ogr -f GeoJSON -t_srs EPSG:4326 data/index_main_wgs84.geojson data/index_main.geojsonl
+ogr2ogr -f GeoJSON -s_srs '+proj=tmerc +lat_0=0 +lon_0=84 +k=0.9999 +x_0=500000 +y_0=0 +units=m +ellps=evrst30 +towgs84=293.17,726.18,245.36,0,0,0,0 +no_defs' -t_srs EPSG:4326 data/index_jica_wgs84.geojson data/index_jica.geojsonl
+ogr2ogr -f GeoJSON -s_srs EPSG:6207 -t_srs EPSG:4326 data/index_main_wgs84.geojson data/index_main.geojsonl
 
 # 11. upload assets to github
 gh release upload maze data/index_jica_wgs84.geojson
@@ -56,8 +58,14 @@ gh release upload maze export/pmtiles/Nepal_main.*
 
 gh release upload survey-georef export/gtiffs/main/*.tif
 gh release upload jica-georef   export/gtiffs/jica/*.tif
-gh release upload survey-georef export/bounds_main.geojson#bounds.geojson
-gh release upload jica-georef   export/bounds_jica.geojson#bounds.geojson
+
+cp export/bounds_main.geojson bounds.geojson
+gh release upload survey-georef bounds.geojson
+rm bounds.geojson
+
+cp export/bounds_jica.geojson bounds.geojson
+gh release upload jica-georef bounds.geojson
+rm bounds.geojson
 
 gh release upload survey-orig data/raw/main/*.jpg
 gh release upload jica-orig data/raw/jica/*.jpg
@@ -67,3 +75,14 @@ gh release upload jica-orig data/raw/jica/*.jpg
 ./generate_lists.sh jica-orig .jpg
 ./generate_lists.sh survey-georef .tif
 ./generate_lists.sh jica-georef .tif
+
+# 13. copy the listing files over to pmtiles release to maintain list of files which have been tiled
+gh release download survey-georef -p listing_files.txt
+mv listing_files.txt listing_files_main.txt
+gh release upload maze listing_files_main.txt
+rm listing_files_main.txt
+
+gh release download jica-georef -p listing_files.txt
+mv listing_files.txt listing_files_jica.txt
+gh release upload maze listing_files_jica.txt
+rm listing_files_jica.txt

@@ -1,0 +1,43 @@
+name: Retile Main Run
+
+concurrency: 
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
+on: 
+  workflow_dispatch:
+
+jobs:
+  Run-Tiling:
+    timeout-minutes: 600
+    runs-on: ubuntu-24.04
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Setup swap
+        uses: pierotofy/set-swap-space@v1.0
+        with:
+          swap-size-gb: 12
+
+      - uses: actions/checkout@v4.1.7
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Install packages
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gdal-bin libgdal-dev
+
+      - name: Retile
+        id: retile
+        run: |
+          mkdir -p export/pmtiles
+          mkdir -p staging/tiles/
+          mkdir -p staging/gtiffs/
+          mkdir -p staging/pmtiles/
+
+          ./retile_sheets.sh -p maze -g survey-georef -x Nepal_main -l listing_files_main.txt
+
