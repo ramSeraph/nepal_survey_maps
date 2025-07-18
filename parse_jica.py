@@ -135,6 +135,8 @@ def process_files():
     if special_cases_file.exists():
         special_cases = json.loads(special_cases_file.read_text())
 
+    index_map = get_index_map_jica()
+
     total = len(image_files)
     processed_count = 0
     failed_count = 0
@@ -143,8 +145,10 @@ def process_files():
     for filepath in image_files:
         print(f'==========  Processed: {processed_count}/{total} Success: {success_count} Failed: {failed_count} processing {filepath.name} ==========')
         extra = special_cases.get(filepath.name, {})
-        index_map = get_index_map_jica()
-        processor = JICAProcessor(filepath, extra, index_map)
+        id = filepath.name.replace('.jpg', '')
+        index_box = index_map[id]
+
+        processor = JICAProcessor(filepath, extra, index_box)
 
         try:
             processor.process()
