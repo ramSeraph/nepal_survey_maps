@@ -39,5 +39,5 @@ jobs:
           mkdir -p staging/gtiffs/
           mkdir -p staging/pmtiles/
 
-          ./retile_sheets.sh -p maze -g survey-georef -x Nepal_main -l listing_files_main.txt
+          ./retile_sheets.sh -p maze -g survey-georef -x Nepal_main -l listing_files_main.csv
 

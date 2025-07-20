@@ -24,10 +24,9 @@ rm bounds.geojson
 rm export/bounds_main.geojson
 
 # 6) update listing
-./generate_lists.sh survey-georef .tif
+uvx --from topo_map_processor generate-lists survey-georef .tif
 
 # 7) redo the tiling 
 ./retile_sheets.sh -p maze -g survey-georef -x Nepal_main -l listing_files_main.txt
-
 
 

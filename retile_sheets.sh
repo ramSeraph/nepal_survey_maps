@@ -20,8 +20,6 @@ if [ -z "$pmtiles_release" ] || [ -z "$gtiffs_release" ] || [ -z "$pmtiles_prefi
 fi
 
 
-
-
 # name of the listing file for tiled PMTiles in the release
 sheets_to_pull_list_outfile="sheets_to_pull_list.txt"
 tiles_dir="staging/tiles/"
@@ -34,16 +32,18 @@ from_pmtiles_prefix="${from_pmtiles_dir}/${pmtiles_prefix}"
 to_pmtiles_prefix="${to_pmtiles_dir}/${pmtiles_prefix}"
 
 echo "Downloading the listing files to get the list of sheets to retile"
-gh release download $gtiffs_release -p listing_files.txt --clobber
-gh release download $pmtiles_release -p $listing_files_tiled --clobber -O listing_files_tiled.txt
+gh release download $gtiffs_release -p listing_files.csv --clobber
+gh release download $pmtiles_release -p $listing_files_tiled --clobber -O listing_files_tiled.csv
 
-comm <(cat listing_files.txt| cut -d" " -f2 | sort) <(cat listing_files_tiled.txt | cut -d" " -f2 | sort) | cut -f1 | grep "^[0-9]" > $retile_list_file
+comm <(cat listing_files.csv| cut -d"," -f1 | sort) <(cat listing_files_tiled.csv| cut -d"," -f1 | sort) | cut -f1 | sed '/^[[:space:]]*$/d'
 
-rm listing_files.txt listing_files_tiled.txt
+echo "Cleaning intermediate listing_files_tiled.csv file"
+rm listing_files_tiled.csv
 
 num_sheets=$(cat $retile_list_file | wc -l)
 if [ $num_sheets -eq 0 ]; then
-    echo "No sheets to retile found. Exiting."
+    echo "No sheets to retile found. cleaning temp files and Exiting."
+    rm listing_files.csv
     rm $retile_list_file
     exit 0
 fi
@@ -70,12 +70,13 @@ uvx --with numpy --with pillow --with gdal==$GDAL_VERSION --from topo_map_proces
 echo "Sheets to pull:"
 cat $sheets_to_pull_list_outfile
 
-sheet_patterns=''
-for sheet in $(cat $sheets_to_pull_list_outfile); do
-    sheet_patterns="${sheet_patterns} -p ${sheet}"
+cat $sheets_to_pull_list_outfile | while read -r fname
+do 
+  echo "Pulling $fname"
+  wget -P "$tiffs_dir" $(grep "^${fname}," listing_files.csv | cut -d"," -f3)
 done
-echo "Pulling sheets"
-gh release download $gtiffs_release -D "$tiffs_dir" $sheet_patterns
+
+echo "Deleting the $sheets_to_pull_list_outfile file"
 rm $sheets_to_pull_list_outfile
 
 echo "Retiling the sheets"
@@ -86,13 +87,16 @@ uvx --with numpy --with pillow --with gdal==$GDAL_VERSION --from topo_map_proces
           --tiles-dir $tiles_dir \
           --tiffs-dir $tiffs_dir
 
+echo "Deleting the $retile_list_file file"
 rm $retile_list_file
+echo "Deleting bounds.geojson"
+rm bounds.geojson
 
 echo "Create the new pmtiles files"
 uvx --from topo_map_processor partition \
-                   --from-tiles-dir $tiles_dir \
-                   --from-pmtiles-prefix $from_pmtiles_prefix \
-                   --to-pmtiles-prefix $to_pmtiles_prefix
+          --from-tiles-dir $tiles_dir \
+          --from-pmtiles-prefix $from_pmtiles_prefix \
+          --to-pmtiles-prefix $to_pmtiles_prefix
 
 
 # the new list might not match previous one.. delete and upload, to avoid leftovers
@@ -107,10 +111,9 @@ echo "Uploading the new PMTiles files"
 gh release upload $pmtiles_release ${to_pmtiles_prefix}* --clobber
 
 echo "Creating the listing files for PMTiles from the geotiffs release"
-gh release download $gtiffs_release -p listing_files.txt
-if [[ $listing_files_tiled != "listing_files.txt" ]]; then
-  echo "Renaming listing_files.txt to $listing_files_tiled"
-  mv listing_files.txt $listing_files_tiled
+if [[ $listing_files_tiled != "listing_files.csv" ]]; then
+  echo "Renaming listing_files.csv to $listing_files_tiled"
+  mv listing_files.csv $listing_files_tiled
 fi
 
 gh release upload $pmtiles_release $listing_files_tiled --clobber
@@ -118,8 +121,6 @@ rm $listing_files_tiled
 
 # cleanup
 echo "Cleaning up staging directories"
-echo "Deleting bounds.geojson"
-rm bounds.geojson
 
 echo "Deleting $tiles_dir"
 rm -rf $tiles_dir

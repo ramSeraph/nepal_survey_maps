@@ -71,18 +71,18 @@ gh release upload survey-orig data/raw/main/*.jpg
 gh release upload jica-orig data/raw/jica/*.jpg
 
 # 12. update listing
-./generate_lists.sh survey-orig .jpg
-./generate_lists.sh jica-orig .jpg
-./generate_lists.sh survey-georef .tif
-./generate_lists.sh jica-georef .tif
+uvx --from topo_map_processor generate-lists survey-orig .jpg
+uvx --from topo_map_processor generate-lists jica-orig .jpg
+uvx --from topo_map_processor generate-lists survey-georef .tif
+uvx --from topo_map_processor generate-lists jica-georef .tif
 
 # 13. copy the listing files over to pmtiles release to maintain list of files which have been tiled
-gh release download survey-georef -p listing_files.txt
-mv listing_files.txt listing_files_main.txt
-gh release upload maze listing_files_main.txt
-rm listing_files_main.txt
+gh release download survey-georef -p listing_files.csv
+mv listing_files.csv listing_files_main.csv
+gh release upload maze listing_files_main.csv
+rm listing_files_main.csv
 
-gh release download jica-georef -p listing_files.txt
-mv listing_files.txt listing_files_jica.txt
-gh release upload maze listing_files_jica.txt
-rm listing_files_jica.txt
+gh release download jica-georef -p listing_files.csv
+mv listing_files.csv listing_files_jica.csv
+gh release upload maze listing_files_jica.csv
+rm listing_files_jica.csv

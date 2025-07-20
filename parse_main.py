@@ -1,7 +1,7 @@
 # /// script
 # requires-python = ">=3.12"
 # dependencies = [
-#     "topo-map-processor",
+#     "topo-map-processor[parse,easyocr]",
 # ]
 #
 # ///
@@ -13,12 +13,9 @@ import json
 import traceback
 from pathlib import Path
 
-from shapely.geometry import (
-    JOIN_STYLE, Point, Polygon
-)
 from pyproj import Transformer
 
-from topo_map_processor import TopoMapProcessor, LineRemovalParams
+from topo_map_processor.processor import TopoMapProcessor, LineRemovalParams
 
 index_map_main = None
 def get_index_map_main():
@@ -66,7 +63,7 @@ class MainProcessor(TopoMapProcessor):
         self.grid_line_correction_context_ratio_2 = extra.get('grid_line_correction_context_ratio_2', 10.0 / 7000.0 )
         self.grid_line_color_degree_choices = extra.get('grid_line_color_degree', ['black'])
         self.grid_line_color_meter_choices = extra.get('grid_line_color_meter', ['sky_blue'])
-        self.grid_find_line_iter = extra.get('grid_find_line_iter', 0)
+        self.grid_find_line_iter.processor = extra.get('grid_find_line_iter', 0)
         self.grid_find_line_scale = extra.get('grid_find_line_scale', 2)
 
 

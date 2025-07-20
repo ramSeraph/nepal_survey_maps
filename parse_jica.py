@@ -1,7 +1,7 @@
 # /// script
 # requires-python = ">=3.12"
 # dependencies = [
-#     "topo-map-processor",
+#     "topo-map-processor[parse]",
 # ]
 #
 # ///
@@ -11,7 +11,7 @@ import os
 import json
 from pathlib import Path
 
-from topo_map_processor import TopoMapProcessor, LineRemovalParams
+from topo_map_processor.processor import TopoMapProcessor, LineRemovalParams
 
 index_map_jica = None
 def get_index_map_jica():

@@ -22,10 +22,6 @@ jobs:
         run: |
           gh release download maze -p index_main_wgs84.geojson -O docs/index_main.geojson
           gh release download maze -p index_jica_wgs84.geojson -O docs/index_jica.geojson
-          gh release download jica-georef -p listing_files.txt -O docs/listing_jica_gtiffs.txt
-          gh release download survey-georef -p listing_files.txt -O docs/listing_main_gtiffs.txt
-          gh release download jica-orig -p listing_files.txt -O docs/listing_jica_jpgs.txt
-          gh release download survey-orig -p listing_files.txt -O docs/listing_main_jpgs.txt
 
       - name: Upload-Artifact
         uses: actions/upload-pages-artifact@v3
