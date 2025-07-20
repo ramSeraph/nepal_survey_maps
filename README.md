@@ -14,7 +14,7 @@ Nepal Survey Department 1:50000/1:25000 sheets gereferenced and tiled into a til
   - Tilemap urls, pmtiles and index files
     - [Pmtiles](https://github.com/ramSeraph/nepal_survey_maps/releases/tag/maze)
 
-  - Georeferncing information actual sheet extents
+  - Georeferncing information and actual sheet extents
     - [Main bounds](https://github.com/ramSeraph/nepal_survey_maps/releases/download/survey-georef/bounds.geojson)
     - [JICA bounds](https://github.com/ramSeraph/nepal_survey_maps/releases/download/jica-georef/bounds.geojson)
 
