@@ -27,6 +27,6 @@ rm export/bounds_main.geojson
 uvx --from topo_map_processor generate-lists survey-georef .tif
 
 # 7) redo the tiling 
-./retile_sheets.sh -p maze -g survey-georef -x Nepal_main -l listing_files_main.txt
+./retile_sheets.sh -p maze -g survey-georef -x Nepal_main -l listing_files_main.csv
 
 
