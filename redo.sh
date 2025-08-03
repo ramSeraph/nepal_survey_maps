@@ -27,6 +27,11 @@ rm export/bounds_main.geojson
 uvx --from topo_map_processor generate-lists survey-georef .tif
 
 # 7) redo the tiling 
-./retile_sheets.sh -p maze -g survey-georef -x Nepal_main -l listing_files_main.csv
+GDAL_VERSION=$(gdalinfo --version | cut -d"," -f1 | cut -d" " -f2)
+uvx --with numpy \
+    --with pillow \
+    --with gdal==$GDAL_VERSION \
+    --from topo_map_processor \
+    retile-e2e -p maze -g survey-georef -x Nepal_main -l listing_files_main.csv
 
 

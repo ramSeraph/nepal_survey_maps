@@ -35,20 +35,22 @@ uv run parse_main.py
 
 # 7. create the tiles
 GDAL_VERSION=$(gdalinfo --version | cut -d"," -f1 | cut -d" " -f2)
-uvx --with numpy --with pillow --with gdal==$GDAL_VERSION --from topo_map_processor tile --tiffs-dir export/gtiffs/jica --tiles-dir export/tiles/jica --max-zoom 15
-uvx --with numpy --with pillow --with gdal==$GDAL_VERSION --from topo_map_processor tile --tiffs-dir export/gtiffs/main --tiles-dir export/tiles/main --max-zoom 15
+uvx --with numpy --with pillow --with gdal==$GDAL_VERSION --from topo_map_processor tile --tiffs-dir export/gtiffs/jica --tiles-dir export/tiles/jica --max-zoom 15 --attribution-file attribution.txt --name "Nepal_jica" --description "Nepal 1:25000 Topo maps from Survey Department in collabartion with JICA"
+uvx --with numpy --with pillow --with gdal==$GDAL_VERSION --from topo_map_processor tile --tiffs-dir export/gtiffs/main --tiles-dir export/tiles/main --max-zoom 15 --attribution-file attribution.txt --name "Nepal_main" --description "Nepal 1:25000 and 1:50000 Topo maps from Survey Department"
 
 # 8. create the partitioned pmtiles
-uvx --from topo_map_processor partition --only-disk --from-tiles-dir export/tiles/jica --to-pmtiles-prefix export/pmtiles/Nepal_jica --attribution-file attribution.txt --name "Nepal_jica" --description "Nepal 1:25000 Topo maps from Survey Department in collabartion with JICA"
-uvx --from topo_map_processor partition --only-disk --from-tiles-dir export/tiles/main --to-pmtiles-prefix export/pmtiles/Nepal_main --attribution-file attribution.txt --name "Nepal_main" --description "Nepal 1:25000 and 1:50000 Topo maps from Survey Department"
+uvx --from topo_map_processor partition --from-source export/tiles/jica --to-pmtiles export/pmtiles/Nepal_jica.pmtiles
+uvx --from topo_map_processor partition --from-source export/tiles/main --to-pmtiles export/pmtiles/Nepal_main.pmtiles
 
 # 9. create the bounds geojson files
 uvx --from topo_map_processor collect-bounds --bounds-dir export/bounds/jica --output-file export/bounds_jica.geojson
 uvx --from topo_map_processor collect-bounds --bounds-dir export/bounds/main --output-file export/bounds_main.geojson
 
 # 10. create the displayable index files
-ogr2ogr -f GeoJSON -s_srs '+proj=tmerc +lat_0=0 +lon_0=84 +k=0.9999 +x_0=500000 +y_0=0 +units=m +ellps=evrst30 +towgs84=293.17,726.18,245.36,0,0,0,0 +no_defs' -t_srs EPSG:4326 data/index_jica_wgs84.geojson data/index_jica.geojsonl
-ogr2ogr -f GeoJSON -s_srs EPSG:6207 -t_srs EPSG:4326 data/index_main_wgs84.geojson data/index_main.geojsonl
+JICA_SRS='+proj=tmerc +lat_0=0 +lon_0=84 +k=0.9999 +x_0=500000 +y_0=0 +units=m +ellps=evrst30 +towgs84=293.17,726.18,245.36,0,0,0,0 +no_defs'
+MAIN_SRS='EPSG:6207'
+ogr2ogr -f GeoJSON -s_srs "$JICA_SRS" -t_srs EPSG:4326 data/index_jica_wgs84.geojson data/index_jica.geojsonl
+ogr2ogr -f GeoJSON -s_srs "$MAIN_SRS" -t_srs EPSG:4326 data/index_main_wgs84.geojson data/index_main.geojsonl
 
 # 11. upload assets to github
 gh release upload maze data/index_jica_wgs84.geojson
