@@ -24,7 +24,7 @@ rm bounds.geojson
 rm export/bounds_main.geojson
 
 # 6) update listing
-uvx --from topo_map_processor generate-lists survey-georef .tif
+uvx --from gh_release_tools generate-lists survey-georef .tif
 
 # 7) redo the tiling 
 GDAL_VERSION=$(gdalinfo --version | cut -d"," -f1 | cut -d" " -f2)
