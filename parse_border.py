@@ -5,9 +5,6 @@
 #     "easyocr",
 # ]
 #
-# [tool.uv.sources]
-# topo_map_processor = { path = "../topo_map_processor/", editable = true }
-#
 # ///
 
 
@@ -16,7 +13,6 @@ import json
 from pathlib import Path
 
 import easyocr
-import cv2
 
 from topo_map_processor.processor import TopoMapProcessor
 
@@ -29,28 +25,15 @@ class BorderProcessor(TopoMapProcessor):
         self.remove_corner_edges_ratio = extra.get('remove_corner_edges_ratio', 0.25)
         self.remove_corner_text = extra.get('remove_corner_text', True)
         self.text_removal_engine = extra.get('text_removal_engine', 'easyocr')
-        self.corner_contour_color = extra.get('corner_contour_color', 'black')
-        self.corner_erode = extra.get('corner_erode', -1)
 
-        self.max_corner_contour_area_ratio = extra.get('max_corner_contour_area_ratio', 0.8)
-        self.min_corner_contour_area_ratio = extra.get('min_corner_contour_area_ratio', 0.02)
-
-        self.corner_max_dist_ratio = extra.get('corner_max_dist_ratio', 0.2)
-        self.max_corner_angle_diff = extra.get('max_corner_angle_diff', 5)
-        self.max_corner_angle_diff_cutoff = extra.get('max_corner_angle_diff_cutoff', 10)
 
         self.find_line_iter = extra.get('find_line_iter', 0)
         self.find_line_scale = extra.get('find_line_scale', 16)
         self.line_color = extra.get('line_color', None)
         self.line_color_choices = extra.get('line_color_choices', [['black'], ['black', 'greyish']])
-        #self.line_color_choices = extra.get('line_color_choices', ['black'])
         self.ext_thresh_ratio = extra.get('ext_thresh_ratio', 20.0 / 18000.0)
         self.cwidth = extra.get('cwidth', 1)
 
-        self.remove_line_buf_ratio = extra.get('remove_line_buf_ratio', 3.0 / 6500.0)
-        self.remove_line_blur_buf_ratio = extra.get('remove_line_blur_buf_ratio', 21.0 / 6500.0)
-        self.remove_line_blur_kern_ratio = extra.get('remove_line_blur_kern_ratio', 13.0 / 6500.0)
-        self.remove_line_blur_repeat = extra.get('remove_line_blur_repeat', 3)
         self.should_remove_grid_lines = extra.get('should_remove_grid_lines', False)
 
         self.index_box_unprocessed = []
@@ -81,11 +64,6 @@ class BorderProcessor(TopoMapProcessor):
             easy_ocr_reader = easyocr.Reader(['en'], gpu=False)
     
         print("Detecting text...")
-        # erode the image to remove noise
-
-        #size = 1
-        #el = cv2.getStructuringElement(cv2.MORPH_RECT, (size, size))
-        #img = cv2.erode(img, el)
 
         # split image into 4 around ip
         h, w = img.shape[:2]
@@ -94,6 +72,7 @@ class BorderProcessor(TopoMapProcessor):
         y = int(y)
         if x < 0 or y < 0 or x >= w or y >= h:
             raise Exception(f"Intersection point {ip} is out of bounds for image size {w}x{h}")
+
         img_left_above = img[:y, :x]
         img_left_below = img[y:, :x]
         img_right_above = img[:y, x:]
