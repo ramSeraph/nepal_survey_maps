@@ -218,11 +218,56 @@ document.addEventListener("DOMContentLoaded", () => {
     var map2 = getMap('map2');
 
     const mainTopoLayer = getTopoLayer('main');
+    mainTopoLayer.set('title', 'Main Survey');
+    mainTopoLayer.set('visible', true);
+
     const jicaTopoLayer = getTopoLayer('jica');
-    const borderLayer = getBorderLayer()
-    map1.addLayer(borderLayer);
-    map1.addLayer(jicaTopoLayer);
-    map1.addLayer(mainTopoLayer);
+    jicaTopoLayer.set('title', 'JICA Survey');
+    jicaTopoLayer.set('visible', false);
+
+    const borderLayer = getBorderLayer();
+    borderLayer.set('title', 'Border Survey');
+    borderLayer.set('visible', false);
+
+    const map1LayerGroup = new ol.layer.Group({
+        title: 'Left Map Source',
+        openInLayerSwitcher: true,
+        layers: [borderLayer, jicaTopoLayer, mainTopoLayer]
+    });
+    map1.addLayer(map1LayerGroup);
+
+    const map1ControlLayerGroup = new ol.layer.Group({
+        title: 'Left Map Source',
+        openInLayerSwitcher: true,
+        layers: [
+            new ol.layer.Tile({
+                title: 'Border Survey',
+                visible: false,
+            }),
+            new ol.layer.Tile({
+                title: 'JICA Survey',
+                visible: false,
+            }),
+            new ol.layer.Tile({
+                title: 'Main Survey',
+                visible: true,
+            })
+        ]
+    });
+
+    map1ControlLayerGroup.getLayers().forEach(l => {
+        l.on('change:visible', (e) => {
+            const title = e.target.get('title');
+            const visible = e.target.getVisible();
+            map1LayerGroup.getLayers().forEach(map1_l => {
+                if (map1_l.get('title') === title) {
+                    map1_l.setVisible(visible);
+                }
+            });
+        });
+    });
+    map2.addLayer(map1ControlLayerGroup);
+
     map2.addLayer(new ol.layer.Vector({
         source: new ol.source.Vector({
             attributions: [topo_attribution]
