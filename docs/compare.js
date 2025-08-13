@@ -220,6 +220,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const mainTopoLayer = getTopoLayer('main');
     const jicaTopoLayer = getTopoLayer('jica');
     const borderLayer = getBorderLayer()
+    map1.addLayer(borderLayer);
     map1.addLayer(jicaTopoLayer);
     map1.addLayer(mainTopoLayer);
     map2.addLayer(new ol.layer.Vector({
@@ -260,9 +261,9 @@ document.addEventListener("DOMContentLoaded", () => {
     map1.addLayer(gridBorderLayer1);
     map2.addLayer(gridBorderLayer2);
 
-    function showPopup(map, e, pop, contentFn) {
+    function showPopup(map, e, pop, key, contentFn) {
         var features = map.getFeaturesAtPixel(e.pixel);
-        features = features.filter((f) => f.get('Name'));
+        features = features.filter((f) => f.get(key));
         const feature = features.length ? features[0] : undefined;
         if (feature === undefined) {
             pop.hide();
@@ -291,11 +292,9 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!layer.getVisible()) {
             return;
         }
-        showPopup(map, e, popup, (f) => {
-            var sheetNo = f.get('Name');
-            if (sheetNo === undefined) {
-                sheetNo = f.get('id');
-            }
+        const key = type == 'border' ? 'id' : 'Name';
+        showPopup(map, e, popup, key, (f) => {
+            var sheetNo = f.get(key);
          
             return '<b text-align="center">' + sheetNo + '</b>';
         });
@@ -306,6 +305,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     addPopup(gridJICALayer2, map2, 'jica');
     addPopup(gridMainLayer2, map2, 'main');
+    addPopup(gridBorderLayer2, map2, 'border');
 
     var swipe = new ol.control.SwipeMap({ right: true });
 

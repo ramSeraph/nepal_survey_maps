@@ -36,6 +36,7 @@ class BorderProcessor(TopoMapProcessor):
 
         self.should_remove_grid_lines = extra.get('should_remove_grid_lines', False)
 
+        self.index_override = extra.get('index_override', None)
         self.index_box_unprocessed = []
 
 
@@ -112,7 +113,7 @@ class BorderProcessor(TopoMapProcessor):
 
             return int(only_digits)
 
-        DUMMY_TXT = '200'
+        DUMMY_TXT = '20000'
         DUMMY_BBOX = [[0, 0], [0, 0], [0, 0], [0, 0]]
         DUMMY_CENTER = (x/2, y/2)
         DUMMY_RESULT = (DUMMY_BBOX, DUMMY_TXT, 1.0, 'dummy', DUMMY_CENTER)
@@ -216,6 +217,11 @@ class BorderProcessor(TopoMapProcessor):
             ]
 
     def precess_index_box(self):
+        if self.index_override is not None:
+            print('Using index box override:', self.index_override)
+            self.index_box = self.index_override
+            return
+
         if len(self.index_box_unprocessed) != 4:
             raise Exception(f"Expected 4 index box coordinates, but found {len(self.index_box_unprocessed)}. Please check the image.")
 
