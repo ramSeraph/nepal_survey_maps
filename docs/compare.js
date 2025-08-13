@@ -1,6 +1,7 @@
 
 const MAIN_LAYER_INDEX = 'Main Index Grid';
 const JICA_LAYER_INDEX = 'JICA Index Grid';
+const BORDER_LAYER_INDEX = 'Border Index Grid';
 
 const boundaryStyle = new ol.style.Style({
     stroke: new ol.style.Stroke({
@@ -51,6 +52,20 @@ function getTopoLayer(type) {
     });
 }
 
+const border_attribution = makeLink("https://pahar.in/", "Pahar");
+
+function getBorderLayer() {
+    const src = new ol.source.XYZ({
+        url: `https://indianopenmaps.fly.dev/nepal/topo/border/{z}/{x}/{y}.webp`,
+        attributions: [border_attribution],
+    });
+    return new ol.layer.Tile({
+        background: 'grey',
+        source: src,
+        maxZoom: 14,
+    });
+}
+
 function getGridSourceMain() {
     const src = new ol.source.Vector({
         format: new ol.format.GeoJSON(),
@@ -65,6 +80,16 @@ function getGridSourceJICA() {
     const src = new ol.source.Vector({
         format: new ol.format.GeoJSON(),
         url: 'index_jica.geojson',
+        overlaps: false,
+        attributions: []
+    });
+    return src;
+}
+
+function getGridSourceBorder() {
+    const src = new ol.source.Vector({
+        format: new ol.format.GeoJSON(),
+        url: 'index_border.geojson',
         overlaps: false,
         attributions: []
     });
@@ -194,6 +219,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const mainTopoLayer = getTopoLayer('main');
     const jicaTopoLayer = getTopoLayer('jica');
+    const borderLayer = getBorderLayer()
     map1.addLayer(jicaTopoLayer);
     map1.addLayer(mainTopoLayer);
     map2.addLayer(new ol.layer.Vector({
@@ -208,6 +234,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const mainGridSrc = getGridSourceMain();
     const jicaGridSrc = getGridSourceJICA();
+    const borderGridSrc = getGridSourceBorder();
 
     var getGridLayer = (layer_index, gridSrc) => {
         return new ol.layer.Vector({
@@ -228,6 +255,10 @@ document.addEventListener("DOMContentLoaded", () => {
     map1.addLayer(gridJICALayer1);
     map2.addLayer(gridJICALayer2);
 
+    const gridBorderLayer1 = getGridLayer(BORDER_LAYER_INDEX, borderGridSrc);
+    const gridBorderLayer2 = getGridLayer(BORDER_LAYER_INDEX, borderGridSrc);
+    map1.addLayer(gridBorderLayer1);
+    map2.addLayer(gridBorderLayer2);
 
     function showPopup(map, e, pop, contentFn) {
         var features = map.getFeaturesAtPixel(e.pixel);
@@ -261,7 +292,11 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
         showPopup(map, e, popup, (f) => {
-            const sheetNo = f.get('Name');
+            var sheetNo = f.get('Name');
+            if (sheetNo === undefined) {
+                sheetNo = f.get('id');
+            }
+         
             return '<b text-align="center">' + sheetNo + '</b>';
         });
       });
@@ -301,6 +336,9 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         if (l.get('title') === JICA_LAYER_INDEX) {
             gridJICALayer1.setVisible(l.getVisible());
+        }
+        if (l.get('title') === BORDER_LAYER_INDEX) {
+            gridBorderLayer1.setVisible(l.getVisible());
         }
     });
     // layerSwitcher.on('select', (e) => {

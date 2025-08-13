@@ -22,6 +22,7 @@ jobs:
         run: |
           gh release download maze -p index_main_wgs84.geojson -O docs/index_main.geojson
           gh release download maze -p index_jica_wgs84.geojson -O docs/index_jica.geojson
+          gh release download border-georef -p bounds.geojson -O docs/index_border.geojson
 
       - name: Upload-Artifact
         uses: actions/upload-pages-artifact@v3
