@@ -44,6 +44,6 @@ jobs:
           uvx --with numpy \
               --with pillow \
               --with gdal==$GDAL_VERSION \
-              --from topo_map_processor \
+              --from topo-map-processor \
               retile-e2e -p maze -g survey-georef -x Nepal_main -l listing_files_main.csv
 

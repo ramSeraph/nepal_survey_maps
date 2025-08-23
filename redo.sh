@@ -18,20 +18,20 @@ gh release upload survey-georef export/gtiffs/main/*.tif --clobber
 # 5) update the bounds.geojson
 gh release download survey-georef -p bounds.geojson
 mv bounds.geojson export/bounds_main.geojson
-uvx --from topo_map_processor collect-bounds --preexisting-file export/bounds_main.geojson --bounds-dir export/bounds/main --output-file bounds.geojson
+uvx --from topo-map-processor collect-bounds --preexisting-file export/bounds_main.geojson --bounds-dir export/bounds/main --output-file bounds.geojson
 gh release upload survey-georef bounds.geojson --clobber
 rm bounds.geojson
 rm export/bounds_main.geojson
 
 # 6) update listing
-uvx --from gh_release_tools generate-lists survey-georef .tif
+uvx --from gh-release-tools generate-lists -r 'survey-georef' -e '.tif'
 
 # 7) redo the tiling 
 GDAL_VERSION=$(gdalinfo --version | cut -d"," -f1 | cut -d" " -f2)
 uvx --with numpy \
     --with pillow \
     --with gdal==$GDAL_VERSION \
-    --from topo_map_processor \
+    --from topo-map-processor \
     retile-e2e -p maze -g survey-georef -x Nepal_main -l listing_files_main.csv
 
 

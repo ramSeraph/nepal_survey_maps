@@ -35,16 +35,16 @@ uv run parse_main.py
 
 # 7. create the tiles
 GDAL_VERSION=$(gdalinfo --version | cut -d"," -f1 | cut -d" " -f2)
-uvx --with numpy --with pillow --with gdal==$GDAL_VERSION --from topo_map_processor tile --tiffs-dir export/gtiffs/jica --tiles-dir export/tiles/jica --max-zoom 15 --attribution-file attribution.txt --name "Nepal_jica" --description "Nepal 1:25000 Topo maps from Survey Department in collabartion with JICA"
-uvx --with numpy --with pillow --with gdal==$GDAL_VERSION --from topo_map_processor tile --tiffs-dir export/gtiffs/main --tiles-dir export/tiles/main --max-zoom 15 --attribution-file attribution.txt --name "Nepal_main" --description "Nepal 1:25000 and 1:50000 Topo maps from Survey Department"
+uvx --with numpy --with pillow --with gdal==$GDAL_VERSION --from topo-map-processor tile --tiffs-dir export/gtiffs/jica --tiles-dir export/tiles/jica --max-zoom 15 --attribution-file attribution.txt --name "Nepal_jica" --description "Nepal 1:25000 Topo maps from Survey Department in collabartion with JICA"
+uvx --with numpy --with pillow --with gdal==$GDAL_VERSION --from topo-map-processor tile --tiffs-dir export/gtiffs/main --tiles-dir export/tiles/main --max-zoom 15 --attribution-file attribution.txt --name "Nepal_main" --description "Nepal 1:25000 and 1:50000 Topo maps from Survey Department"
 
 # 8. create the partitioned pmtiles
-uvx --from pmtiles_mosaic partition --from-source export/tiles/jica --to-pmtiles export/pmtiles/Nepal_jica.pmtiles
-uvx --from pmtiles_mosaic partition --from-source export/tiles/main --to-pmtiles export/pmtiles/Nepal_main.pmtiles
+uvx --from pmtiles-mosaic partition --from-source export/tiles/jica --to-pmtiles export/pmtiles/Nepal_jica.pmtiles
+uvx --from pmtiles-mosaic partition --from-source export/tiles/main --to-pmtiles export/pmtiles/Nepal_main.pmtiles
 
 # 9. create the bounds geojson files
-uvx --from topo_map_processor collect-bounds --bounds-dir export/bounds/jica --output-file export/bounds_jica.geojson
-uvx --from topo_map_processor collect-bounds --bounds-dir export/bounds/main --output-file export/bounds_main.geojson
+uvx --from topo-map-processor collect-bounds --bounds-dir export/bounds/jica --output-file export/bounds_jica.geojson
+uvx --from topo-map-processor collect-bounds --bounds-dir export/bounds/main --output-file export/bounds_main.geojson
 
 # 10. create the displayable index files
 JICA_SRS='+proj=tmerc +lat_0=0 +lon_0=84 +k=0.9999 +x_0=500000 +y_0=0 +units=m +ellps=evrst30 +towgs84=293.17,726.18,245.36,0,0,0,0 +no_defs'
@@ -73,10 +73,10 @@ gh release upload survey-orig data/raw/main/*.jpg
 gh release upload jica-orig data/raw/jica/*.jpg
 
 # 12. update listing
-uvx --from gh_release_tools generate-lists survey-orig .jpg
-uvx --from gh_release_tools generate-lists jica-orig .jpg
-uvx --from gh_release_tools generate-lists survey-georef .tif
-uvx --from gh_release_tools generate-lists jica-georef .tif
+uvx --from gh-release-tools generate-lists -r 'survey-orig' -e '.jpg'
+uvx --from gh-release-tools generate-lists -r 'jica-orig' -e '.jpg'
+uvx --from gh-release-tools generate-lists -r 'survey-georef' -e '.tif'
+uvx --from gh-release-tools generate-lists -r 'jica-georef' -e '.tif'
 
 # 13. copy the listing files over to pmtiles release to maintain list of files which have been tiled
 gh release download survey-georef -p listing_files.csv
