@@ -162,9 +162,9 @@ function getLayerGroup() {
         maxZoom: 20,
         title: 'ESRI Satellite',
     });
-    const otmLayer = new ol.layer.Tile({
-        source: new ol.source.XYZ({
-            url: 'https://{a-c}.tile.opentopomap.org/{z}/{x}/{y}.png', 
+    const otmLayer = new IndiaBoundaryCorrectedTileLayer({
+        url: 'https://{a-c}.tile.opentopomap.org/{z}/{x}/{y}.png',
+        sourceOptions: {
             attributions: [
                 'Map data: &copy; ' + makeLink('https://www.openstreetmap.org/copyright', 'OpenStreetMap contributors'),
                 makeLink('http://viewfinderpanoramas.org', 'SRTM'),
@@ -172,7 +172,7 @@ function getLayerGroup() {
                 makeLink('https://opentopomap.org', 'OpenTopoMap') +
                 ' (' + makeLink('https://creativecommons.org/licenses/by-sa/3.0/', 'CC-BY-SA') + ')'
             ]
-        }),
+        },
         baseLayer: true,
         visible: false,
         maxZoom: 17,
