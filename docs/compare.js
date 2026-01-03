@@ -164,6 +164,7 @@ function getLayerGroup() {
     });
     const otmLayer = new IndiaBoundaryCorrectedTileLayer({
         url: 'https://{a-c}.tile.opentopomap.org/{z}/{x}/{y}.png',
+        layerConfig: 'open-topo',
         sourceOptions: {
             attributions: [
                 'Map data: &copy; ' + makeLink('https://www.openstreetmap.org/copyright', 'OpenStreetMap contributors'),
