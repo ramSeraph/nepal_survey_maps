@@ -109,13 +109,15 @@ function getLayer(src, style, visible) {
 
 function getLayerGroup() {
 
-    const osmLayer = new ol.layer.Tile({
-        source: new ol.source.XYZ({
-            url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png', 
+    const { IndiaBoundaryCorrectedTileLayer } = IndiaBoundaryCorrector;
+
+    const osmLayer = new IndiaBoundaryCorrectedTileLayer({
+        url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+        sourceOptions: {
             attributions: [
                 '&copy; ' + makeLink('https://www.openstreetmap.org/copyright', 'OpenStreetMap contributors') 
             ],
-        }),
+        },
         baseLayer: true,
         visible: true,
         maxZoom: 19,
